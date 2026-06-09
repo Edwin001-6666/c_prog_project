@@ -101,4 +101,5 @@ When you delete or modify a shape, the program:
 This guarantees that the canvas always displays a correct preview.
 
 ## Made By
-Student Project - C Programming
+Edwin
+
