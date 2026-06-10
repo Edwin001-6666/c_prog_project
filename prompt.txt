@@ -28,8 +28,6 @@ Design and implement a menu-driven 2D Graphics Editor in C. The application must
    - Check all coordinates (X and Y) to ensure they are strictly within canvas bounds.
    - If a shape coordinate falls out of bounds or dimensions are invalid (e.g., radius/width <= 0), print: `"Coordinates out of bound!"` and reject the operation (or revert to the previous shape state if modifying).
 
-5. **Style Guidelines**:
-   - Output code file must be completely clean with **zero comments** (remove all inline and block comments).
 
 ## Repository & Documentation Requirements
 1. **GitHub Integration**:
