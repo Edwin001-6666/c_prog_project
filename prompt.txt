@@ -1,0 +1,43 @@
+# Master Prompt: 2D Graphics Editor (C Project)
+
+## Role & Tone
+Act as a student with beginner-level C programming experience. The code should be clean, straightforward, structured using standard functions and arrays, and avoid advanced language features that a beginner wouldn't use.
+
+## Project Description & Architecture
+Design and implement a menu-driven 2D Graphics Editor in C. The application must satisfy the following constraints:
+
+1. **Canvas System**:
+   - Represented by a 2D character array (e.g., 30 rows by 60 columns).
+   - The canvas is initially filled with '_' (underscore).
+   - Graphical objects must be drawn using the '*' (asterisk) character.
+
+2. **Supported Shapes**:
+   - Circle (using midpoint circle algorithm or similar simple approach).
+   - Rectangle (drawing four outline borders).
+   - Line (Bresenham's line algorithm or simple interpolation).
+   - Triangle (connecting three coordinates with lines).
+
+3. **Core Functionalities**:
+   - **Add**: Allow the user to specify shape attributes and add them to the canvas.
+   - **Delete**: Remove a shape (clear and redraw remaining shapes).
+   - **Modify**: Update any attribute of an existing shape.
+   - **Display**: Output the current state of the canvas grid to the console.
+   - **Clear**: Clear the canvas completely.
+
+4. **Input Validation & Boundary Checking**:
+   - Check all coordinates (X and Y) to ensure they are strictly within canvas bounds.
+   - If a shape coordinate falls out of bounds or dimensions are invalid (e.g., radius/width <= 0), print: `"Coordinates out of bound!"` and reject the operation (or revert to the previous shape state if modifying).
+
+5. **Style Guidelines**:
+   - Output code file must be completely clean with **zero comments** (remove all inline and block comments).
+
+## Repository & Documentation Requirements
+1. **GitHub Integration**:
+   - Code is targeted for: `https://github.com/Edwin001-6666/c_prog_project.git`.
+2. **README.md**:
+   - Must clearly explain how to compile and run the editor on **Windows** using three options:
+     * Option 1: GCC/MinGW
+     * Option 2: Microsoft Visual Studio Compiler (MSVC)
+     * Option 3: Turbo C/C++
+   - Exclude any Linux-specific compilation instructions.
+   - Explicitly list the author as **Edwin John**.

@@ -1,44 +1,28 @@
-/*
-   2D Graphics Editor
-   ------------------
-   A simple menu-driven program that lets you draw shapes
-   on a character canvas using a 2D array.
-
-   Canvas is filled with '_' (underscore)
-   Shapes are drawn with '*' (asterisk)
-*/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 
-// canvas size
 #define ROWS 30
 #define COLS 60
 #define MAX_OBJ 20
 
-// the canvas (2D character array)
 char canvas[ROWS][COLS];
 
-// shape types using simple numbers
 #define CIRCLE    1
 #define RECTANGLE 2
 #define LINE      3
 #define TRIANGLE  4
 
-// structure to store one shape
 struct Shape {
-    int type;       // 1=circle, 2=rect, 3=line, 4=triangle
-    int x1, y1;     // first point or top-left or center
-    int x2, y2;     // second point or width/height or radius
-    int x3, y3;     // third point (only for triangle)
+    int type;
+    int x1, y1;
+    int x2, y2;
+    int x3, y3;
 };
 
-// array to store all shapes
 struct Shape shapes[MAX_OBJ];
-int count = 0;  // how many shapes we have
+int count = 0;
 
-// ---- Function declarations ----
 void fillCanvas();
 void showCanvas();
 void redraw();
@@ -55,18 +39,14 @@ void showAllShapes();
 void printShapeName(int type);
 int isOutOfBound(int x, int y);
 
-// =============================================
-//                  MAIN
-// =============================================
 int main() {
     int choice;
 
-    fillCanvas();  // start with blank canvas
+    fillCanvas();
 
     printf("\n=== Welcome to 2D Graphics Editor ===\n");
 
     while (1) {
-        // show menu
         printf("\n");
         printf("---------- MENU ----------\n");
         printf("1. Add a shape\n");
@@ -112,11 +92,6 @@ int main() {
     return 0;
 }
 
-// =============================================
-//          CANVAS FUNCTIONS
-// =============================================
-
-// fill the whole canvas with underscores
 void fillCanvas() {
     int i, j;
     for (i = 0; i < ROWS; i++) {
@@ -126,13 +101,11 @@ void fillCanvas() {
     }
 }
 
-// display the canvas on screen
 void showCanvas() {
     int i, j;
 
     printf("\n");
 
-    // print column numbers (only tens)
     printf("    ");
     for (j = 0; j < COLS; j++) {
         if (j % 10 == 0)
@@ -142,20 +115,17 @@ void showCanvas() {
     }
     printf("\n");
 
-    // print column numbers (units)
     printf("    ");
     for (j = 0; j < COLS; j++) {
         printf("%d", j % 10);
     }
     printf("\n");
 
-    // top border
     printf("   +");
     for (j = 0; j < COLS; j++)
         printf("-");
     printf("+\n");
 
-    // print each row
     for (i = 0; i < ROWS; i++) {
         printf("%2d |", i);
         for (j = 0; j < COLS; j++) {
@@ -164,14 +134,12 @@ void showCanvas() {
         printf("|\n");
     }
 
-    // bottom border
     printf("   +");
     for (j = 0; j < COLS; j++)
         printf("-");
     printf("+\n");
 }
 
-// clear canvas and redraw all shapes
 void redraw() {
     int i;
     fillCanvas();
@@ -180,19 +148,12 @@ void redraw() {
     }
 }
 
-// put a '*' at position (x, y) if it is inside the canvas
 void putPoint(int x, int y) {
-    // x is column, y is row
     if (x >= 0 && x < COLS && y >= 0 && y < ROWS) {
         canvas[y][x] = '*';
     }
 }
 
-// =============================================
-//         DRAWING FUNCTIONS
-// =============================================
-
-// draw a circle using midpoint algorithm
 void drawCircle(int cx, int cy, int r) {
     int x, y, d;
 
@@ -201,7 +162,6 @@ void drawCircle(int cx, int cy, int r) {
     d = 1 - r;
 
     while (x <= y) {
-        // draw 8 symmetric points
         putPoint(cx + x, cy + y);
         putPoint(cx - x, cy + y);
         putPoint(cx + x, cy - y);
@@ -221,39 +181,31 @@ void drawCircle(int cx, int cy, int r) {
     }
 }
 
-// draw a rectangle (just the border)
 void drawRect(int x, int y, int w, int h) {
     int i;
 
-    // top side
     for (i = x; i < x + w; i++)
         putPoint(i, y);
 
-    // bottom side
     for (i = x; i < x + w; i++)
         putPoint(i, y + h - 1);
 
-    // left side
     for (i = y; i < y + h; i++)
         putPoint(x, i);
 
-    // right side
     for (i = y; i < y + h; i++)
         putPoint(x + w - 1, i);
 }
 
-// draw a line using Bresenham's algorithm
 void drawLine(int x1, int y1, int x2, int y2) {
     int dx, dy, sx, sy, err, e2;
 
-    // calculate differences
     dx = x2 - x1;
-    if (dx < 0) dx = -dx;  // absolute value
+    if (dx < 0) dx = -dx;
 
     dy = y2 - y1;
-    if (dy < 0) dy = -dy;  // absolute value
+    if (dy < 0) dy = -dy;
 
-    // figure out which direction to step
     if (x1 < x2)
         sx = 1;
     else
@@ -269,7 +221,6 @@ void drawLine(int x1, int y1, int x2, int y2) {
     while (1) {
         putPoint(x1, y1);
 
-        // check if we reached the end
         if (x1 == x2 && y1 == y2)
             break;
 
@@ -286,24 +237,20 @@ void drawLine(int x1, int y1, int x2, int y2) {
     }
 }
 
-// draw a triangle (3 lines connecting 3 points)
 void drawTriangle(int x1, int y1, int x2, int y2, int x3, int y3) {
-    drawLine(x1, y1, x2, y2);  // side 1
-    drawLine(x2, y2, x3, y3);  // side 2
-    drawLine(x3, y3, x1, y1);  // side 3
+    drawLine(x1, y1, x2, y2);
+    drawLine(x2, y2, x3, y3);
+    drawLine(x3, y3, x1, y1);
 }
 
-// draw shape number 'index' from the shapes array
 void drawOneShape(int index) {
     struct Shape s = shapes[index];
 
     if (s.type == CIRCLE) {
         drawCircle(s.x1, s.y1, s.x2);
-        // x1=cx, y1=cy, x2=radius
     }
     else if (s.type == RECTANGLE) {
         drawRect(s.x1, s.y1, s.x2, s.y2);
-        // x1=left x, y1=top y, x2=width, y2=height
     }
     else if (s.type == LINE) {
         drawLine(s.x1, s.y1, s.x2, s.y2);
@@ -313,24 +260,13 @@ void drawOneShape(int index) {
     }
 }
 
-// =============================================
-//         BOUNDS CHECKING
-// =============================================
-
-// check if a point is outside the canvas
-// returns 1 if out of bound, 0 if okay
 int isOutOfBound(int x, int y) {
     if (x < 0 || x >= COLS || y < 0 || y >= ROWS) {
-        return 1;  // out of bound
+        return 1;
     }
-    return 0;  // inside canvas
+    return 0;
 }
 
-// =============================================
-//         ADD / DELETE / MODIFY
-// =============================================
-
-// add a new shape
 void addShape() {
     int choice;
     struct Shape s;
@@ -356,12 +292,10 @@ void addShape() {
         scanf("%d", &s.y1);
         printf("Enter radius: ");
         scanf("%d", &s.x2);
-        // we store radius in x2
         s.y2 = 0;
         s.x3 = 0;
         s.y3 = 0;
 
-        // check if center is out of bound
         if (isOutOfBound(s.x1, s.y1)) {
             printf("Coordinates out of bound! X must be 0-%d, Y must be 0-%d.\n",
                    COLS - 1, ROWS - 1);
@@ -385,13 +319,11 @@ void addShape() {
         s.x3 = 0;
         s.y3 = 0;
 
-        // check if top-left corner is out of bound
         if (isOutOfBound(s.x1, s.y1)) {
             printf("Coordinates out of bound! X must be 0-%d, Y must be 0-%d.\n",
                    COLS - 1, ROWS - 1);
             return;
         }
-        // check if bottom-right corner is out of bound
         if (isOutOfBound(s.x1 + s.x2 - 1, s.y1 + s.y2 - 1)) {
             printf("Coordinates out of bound! Rectangle goes outside the canvas.\n");
             return;
@@ -414,12 +346,10 @@ void addShape() {
         s.x3 = 0;
         s.y3 = 0;
 
-        // check if start point is out of bound
         if (isOutOfBound(s.x1, s.y1)) {
             printf("Coordinates out of bound! Start point is outside the canvas.\n");
             return;
         }
-        // check if end point is out of bound
         if (isOutOfBound(s.x2, s.y2)) {
             printf("Coordinates out of bound! End point is outside the canvas.\n");
             return;
@@ -440,7 +370,6 @@ void addShape() {
         printf("Enter point 3 Y (0 to %d): ", ROWS - 1);
         scanf("%d", &s.y3);
 
-        // check if any point is out of bound
         if (isOutOfBound(s.x1, s.y1)) {
             printf("Coordinates out of bound! Point 1 is outside the canvas.\n");
             return;
@@ -459,7 +388,6 @@ void addShape() {
         return;
     }
 
-    // save the shape and draw it
     shapes[count] = s;
     drawOneShape(count);
     count++;
@@ -468,7 +396,6 @@ void addShape() {
     showCanvas();
 }
 
-// delete a shape by its number
 void deleteShape() {
     int num, i;
 
@@ -487,24 +414,21 @@ void deleteShape() {
         return;
     }
 
-    // remove the shape by shifting others down
     for (i = num - 1; i < count - 1; i++) {
         shapes[i] = shapes[i + 1];
     }
     count--;
 
-    // redraw everything without the deleted shape
     redraw();
 
     printf("Shape deleted! Canvas redrawn.\n");
     showCanvas();
 }
 
-// modify an existing shape
 void modifyShape() {
     int num;
     struct Shape *s;
-    struct Shape old;  // to save old values in case new ones are out of bound
+    struct Shape old;
 
     if (count == 0) {
         printf("No shapes to modify.\n");
@@ -521,8 +445,8 @@ void modifyShape() {
         return;
     }
 
-    s = &shapes[num - 1];  // pointer to the shape we want to change
-    old = *s;  // save old values before changing
+    s = &shapes[num - 1];
+    old = *s;
 
     printf("\nModifying shape #%d (", num);
     printShapeName(s->type);
@@ -626,18 +550,12 @@ void modifyShape() {
         }
     }
 
-    // redraw everything with updated values
     redraw();
 
     printf("Shape modified! Canvas redrawn.\n");
     showCanvas();
 }
 
-// =============================================
-//           HELPER FUNCTIONS
-// =============================================
-
-// print the name of a shape type
 void printShapeName(int type) {
     if (type == CIRCLE)
         printf("Circle");
@@ -651,7 +569,6 @@ void printShapeName(int type) {
         printf("Unknown");
 }
 
-// show list of all shapes with their details
 void showAllShapes() {
     int i;
 
